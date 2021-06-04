@@ -7,7 +7,7 @@ class Snake:
     def __init__(self, screen):
         self.screen = screen
         self.size = 20
-        self.speed = 5
+        self.speed = 10
         self.x_snake = gb.width/2
         self.y_snake = gb.height/2
         self.snake_lenght = 0
@@ -58,7 +58,7 @@ class Snake:
         if (len(self.pos_body) > self.snake_lenght):
             del self.pos_body[0]
 
-        color = (0,255,0)
+        color = gb.color_green
         # desenha o corpo
         for pos in self.pos_body:
             pos_body = (pos[0], pos[1], self.size, self.size)

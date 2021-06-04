@@ -9,7 +9,7 @@ class Apple:
         self.size = 20
         self.x_apple = randint(40, 600)
         self.y_apple = randint(50, 430)
-        self.apple_color = (255,0,0)
+        self.apple_color = gb.color_red
         self.screen = screen
 
     def draw(self):

@@ -11,10 +11,10 @@ class Game:
         pygame.init()
         self.width = gb.width
         self.height = gb.height
-        self.back_ground_color = (255,255,255)
-        self.font_color = (0,0,0)
+        self.back_ground_color = gb.color_white
+        self.font_color =gb.color_white
         self.points = 0
-        self.font = pygame.font.SysFont('arial', 30, bold=True, italic=True)
+        self.font = pygame.font.SysFont('arial', 20, bold=True, italic=False)
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption('Python Snake Game')
         self.snk = Snake(self.screen)
@@ -22,8 +22,33 @@ class Game:
 
     def update_game_stats(self):
         message = f'Points: {self.points}'
-        text = self.font.render(message, True, self.font_color)
-        self.screen.blit(text, (450,40))
+        text = self.font.render(message, True, gb.color_white)
+        self.screen.blit(text, (20,10))
+
+    def draw(self):
+        # Background
+        self.screen.fill(self.back_ground_color)
+
+        # left control panel
+        pos_pnl_left = (0,0, gb.width//3, gb.height)
+        pygame.draw.rect(self.screen, gb.color_black, pos_pnl_left)
+
+        # snake border
+        pygame.draw.rect(self.screen, gb.color_grey, (gb.width//3, 0, gb.width, gb.height), gb.border)
+
+        # game border
+        pygame.draw.rect(self.screen, gb.color_grey, (0, 0, gb.width, gb.height), gb.border)
+
+        # game area
+        start_w = ((gb.width+gb.border)//3)
+        cells = (gb.width - start_w) // self.snk.size
+        x = start_w
+        for cell in range(cells):
+            x = x + self.snk.size
+            pos_start = (x, 0)
+            pos_end = (x, gb.height)
+            pygame.draw.line(self.screen, gb.color_grey, pos_start, pos_end)
+
 
     def test_collide(self, snake_object, apple_object):
         if snake_object.colliderect(apple_object):
@@ -37,8 +62,8 @@ class Game:
         '''
         relogio = pygame.time.Clock()
         while True:
-            relogio.tick(30)
-            self.screen.fill(self.back_ground_color)
+            relogio.tick(gb.frame_rate)
+            self.draw()
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -63,7 +88,8 @@ class Game:
             points = self.test_collide(snake_obj, apple_obj)
             self.update_game_stats()
 
-            pygame.display.update()
+            pygame.display.flip()
+            #pygame.display.update()
 
 
 if __name__ == "__main__":
