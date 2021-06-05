@@ -6,8 +6,8 @@ from pygame.locals import *
 class Snake:
     def __init__(self, screen):
         self.screen = screen
-        self.size = 20
-        self.speed = 10
+        self.size = gb.square_size
+        self.speed = 5
         self.x_snake = gb.width/2
         self.y_snake = gb.height/2
         self.snake_lenght = 0
@@ -15,12 +15,14 @@ class Snake:
         self.pos_head = []
         self.x_direction = -self.speed
         self.y_direction = 0
+        self.global_direction = 'l' #l, r, u, d
 
 
     def move_lef(self):
         if self.x_direction > 0: #block if going to right
             pass
         else:
+            self.global_direction = 'l'
             self.x_direction = -self.speed
             self.y_direction = 0
 
@@ -28,6 +30,7 @@ class Snake:
         if self.x_direction < 0: #block if going to left
             pass
         else:
+            self.global_direction = 'r'
             self.x_direction = self.speed
             self.y_direction = 0
 
@@ -35,6 +38,7 @@ class Snake:
         if self.y_direction > 0: #blobk if going to down
             pass
         else:
+            self.global_direction = 'u'
             self.x_direction = 0
             self.y_direction = -self.speed
 
@@ -42,6 +46,7 @@ class Snake:
         if self.y_direction < 0: #blobk if going to up
             pass
         else:
+            self.global_direction = 'd'
             self.x_direction = 0
             self.y_direction = self.speed
 
@@ -66,4 +71,12 @@ class Snake:
 
         # desenha a cabeça
         pos_head = (self.x_snake, self.y_snake, self.size, self.size)
-        return pygame.draw.rect(self.screen, color, pos_head)
+        rect = pygame.draw.rect(self.screen, color, pos_head)
+
+        x_eye = self.size // 4
+        y_eye1 = self.size // 6
+        y_eye2 = self.size * 0.8
+        eye_size = int(self.size * 0.15)
+        pygame.draw.circle(self.screen, gb.color_red, (pos_head[0]+x_eye, pos_head[1]+y_eye1),eye_size)
+        pygame.draw.circle(self.screen, gb.color_red, (pos_head[0]+x_eye, pos_head[1]+y_eye2),eye_size)
+        return rect

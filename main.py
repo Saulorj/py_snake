@@ -8,21 +8,44 @@ from apple import Apple
 
 class Game:
     def __init__(self):
-        pygame.init()
-        self.width = gb.width
-        self.height = gb.height
+        self.width = 0
+        self.height = 0
         self.back_ground_color = gb.color_white
         self.font_color =gb.color_white
         self.points = 0
-        self.font = pygame.font.SysFont('arial', 20, bold=True, italic=False)
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption('Python Snake Game')
+        self.game_area = (0, 0, 0, 0)
+        self.game_matrix = gb.matrix
+        self.set_game_area()
+        self.screen = self.set_pygame()
+        self.create_objects(self.screen)
+
+    def create_objects(self, screen):
         self.snk = Snake(self.screen)
         self.apple = Apple(self.screen)
 
+
+    def set_pygame(self):
+        pygame.init()
+        screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption('Python Snake Game')
+        return screen
+
+    def set_game_area(self):
+        '''
+          Set the game area based on game_matrix
+        '''
+        game_area = (self.game_matrix[0] * gb.square_size)
+        game_area_start = game_area // 2
+        self.width = game_area + game_area_start
+        self.height = self.game_matrix[1] * gb.square_size
+        self.game_area = (game_area_start, 0, self.width, self.height)
+        self.control_area = (0, 0, game_area_start, self.height)
+        pass
+
     def update_game_stats(self):
+        point_font = pygame.font.SysFont('arial', 20, bold=True, italic=False)
         message = f'Points: {self.points}'
-        text = self.font.render(message, True, gb.color_white)
+        text = point_font.render(message, True, gb.color_white)
         self.screen.blit(text, (20,10))
 
     def draw(self):
@@ -30,16 +53,17 @@ class Game:
         self.screen.fill(self.back_ground_color)
 
         # left control panel
-        pos_pnl_left = (0,0, gb.width//3, gb.height)
-        pygame.draw.rect(self.screen, gb.color_black, pos_pnl_left)
+        pygame.draw.rect(self.screen, gb.color_black, self.control_area)
 
         # snake border
-        pygame.draw.rect(self.screen, gb.color_grey, (gb.width//3, 0, gb.width, gb.height), gb.border)
+        #pygame.draw.rect(self.screen, gb.color_grey, (gb.width//3, 0, gb.width, gb.height), gb.border)
 
         # game border
-        pygame.draw.rect(self.screen, gb.color_grey, (0, 0, gb.width, gb.height), gb.border)
+        #pygame.draw.rect(self.screen, gb.color_grey, (0, 0, gb.width, gb.height), gb.border)
 
         # game area
+        pygame.draw.rect(self.screen, gb.color_grey, self.game_area)
+        '''
         start_w = ((gb.width+gb.border)//3)
         cells = (gb.width - start_w) // self.snk.size
         x = start_w
@@ -48,7 +72,7 @@ class Game:
             pos_start = (x, 0)
             pos_end = (x, gb.height)
             pygame.draw.line(self.screen, gb.color_grey, pos_start, pos_end)
-
+        '''
 
     def test_collide(self, snake_object, apple_object):
         if snake_object.colliderect(apple_object):

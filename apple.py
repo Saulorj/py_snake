@@ -6,7 +6,7 @@ from pygame.locals import *
 
 class Apple:
     def __init__(self, screen):
-        self.size = 20
+        self.size = gb.square_size
         self.x_apple = randint(40, 600)
         self.y_apple = randint(50, 430)
         self.apple_color = gb.color_red

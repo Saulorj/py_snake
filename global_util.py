@@ -4,6 +4,8 @@ width = 1300
 height = 700
 frame_rate = 30
 border = 5
+matrix = (25, 25)
+square_size = 25
 
 color_white = (255,255,255)
 color_black = (0,0,0)
