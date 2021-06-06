@@ -48,6 +48,12 @@ class Game:
         text = point_font.render(message, True, gb.color_white)
         self.screen.blit(text, (20,10))
 
+    def show_pause(self):
+        point_font = pygame.font.SysFont('arial', 20, bold=True, italic=False)
+        text = point_font.render("Game Pause", True, gb.color_white)
+        self.screen.blit(text, (20,10))
+
+
     def draw(self):
         # Background
         self.screen.fill(self.back_ground_color)
@@ -85,6 +91,8 @@ class Game:
         Snake game main loops
         '''
         relogio = pygame.time.Clock()
+        RUNNING, PAUSE = 0, 1
+        state = RUNNING
         while True:
             relogio.tick(gb.frame_rate)
             self.draw()
@@ -103,14 +111,19 @@ class Game:
                         self.snk.move_up()
                     if event.key == K_s:
                         self.snk.move_down()
+                    if event.key == pygame.K_p: state = PAUSE
+                    if event.key == pygame.K_r: state = RUNNING
 
-            # upgrade position automatically
-            self.snk.move_it()
             snake_obj = self.snk.draw()
             apple_obj = self.apple.draw()
 
-            points = self.test_collide(snake_obj, apple_obj)
-            self.update_game_stats()
+            if (state == RUNNING):
+                # upgrade position automatically
+                self.snk.move_it()
+                points = self.test_collide(snake_obj, apple_obj)
+                self.update_game_stats()
+            elif (state == PAUSE):
+                self.show_pause()
 
             pygame.display.flip()
             #pygame.display.update()
