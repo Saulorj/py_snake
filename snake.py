@@ -72,11 +72,34 @@ class Snake:
         # desenha a cabeça
         pos_head = (self.x_snake, self.y_snake, self.size, self.size)
         rect = pygame.draw.rect(self.screen, color, pos_head)
+        x_eye1 = 0
+        x_eye2 = 0
+        y_eye1 = 0
+        y_eye2 = 0
 
-        x_eye = self.size // 4
-        y_eye1 = self.size // 6
-        y_eye2 = self.size * 0.8
+        if (self.global_direction == 'l'):
+            x_eye1 = pos_head[0] + (self.size // 4)
+            x_eye2 = pos_head[0] + (self.size // 4)
+            y_eye1 = pos_head[1] + (self.size // 6 )
+            y_eye2 = pos_head[1] + (self.size * 0.8)
+        elif (self.global_direction == 'r'):
+            x_eye1 = pos_head[0] + self.size - (self.size // 4)
+            x_eye2 = pos_head[0] + self.size - (self.size // 4)
+            y_eye1 = pos_head[1] + (self.size // 6)
+            y_eye2 = pos_head[1] + (self.size * 0.8)
+        elif (self.global_direction == 'u'):
+            x_eye1 = pos_head[0] + (self.size // 4)
+            x_eye2 = pos_head[0] + self.size - (self.size // 4)
+            y_eye1 = pos_head[1] + (self.size // 5)
+            y_eye2 = pos_head[1] + (self.size // 5)
+        elif (self.global_direction == 'd'):
+            x_eye1 = pos_head[0] + self.size - (self.size // 4)
+            x_eye2 = pos_head[0] + (self.size // 4)
+            y_eye1 = pos_head[1] + (self.size * 0.8)
+            y_eye2 = pos_head[1] + (self.size * 0.8)
+
         eye_size = int(self.size * 0.15)
-        pygame.draw.circle(self.screen, gb.color_red, (pos_head[0]+x_eye, pos_head[1]+y_eye1),eye_size)
-        pygame.draw.circle(self.screen, gb.color_red, (pos_head[0]+x_eye, pos_head[1]+y_eye2),eye_size)
+        pygame.draw.circle(self.screen, gb.color_red, (x_eye1, y_eye1),eye_size)
+        pygame.draw.circle(self.screen, gb.color_red, (x_eye2, y_eye2),eye_size)
+
         return rect
